@@ -1,1 +1,6 @@
-infra/terraform/terraform.tfvars
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+code/infra/terraform/terraform.tfvars
