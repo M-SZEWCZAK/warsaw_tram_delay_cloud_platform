@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/timetable-loader:latest', '-f', 'timetable_loader/Dockerfile', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/position-ingestor:latest', '-f', 'position_ingestor/Dockerfile', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/weather-ingestor:latest', '-f', 'weather_ingestor/Dockerfile', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/prediction-api:latest', '-f', 'prediction_api/Dockerfile', '.']
+
+images:
+  - 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/timetable-loader:latest'
+  - 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/position-ingestor:latest'
+  - 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/weather-ingestor:latest'
+  - 'europe-central2-docker.pkg.dev/$PROJECT_ID/tram-platform/prediction-api:latest'
