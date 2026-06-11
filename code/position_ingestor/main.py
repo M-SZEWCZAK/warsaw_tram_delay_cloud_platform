@@ -33,24 +33,52 @@ INGESTED_AT = datetime.now(timezone.utc).isoformat()
 
 # ── Fetch positions ───────────────────────────────────────────────────────────
 
+# def fetch_tram_positions() -> list[dict]:
+#     """
+#     GET /api/action/wsstore_get — returns all active tram positions.
+#     Response fields: VehicleNumber, Lines, Brigade, Lat, Lon, Time.
+#     """
+#     resp = requests.get(
+#         f"{WARSAW_API_BASE}/wsstore_get",
+#         params={
+#             "id":     RESOURCE_TRAM_POSITIONS,
+#             "type":   "2",
+#             "apikey": WARSAW_API_KEY,
+#         },
+#         timeout=(15, 60),
+#     )
+#     resp.raise_for_status()
+#     data = resp.json()
+#     return data.get("result", [])
+
 def fetch_tram_positions() -> list[dict]:
     """
-    GET /api/action/wsstore_get — returns all active tram positions.
+    POST /api/action/get_ztm_lokalizacja_pojazdow — returns all active tram positions.
     Response fields: VehicleNumber, Lines, Brigade, Lat, Lon, Time.
     """
-    resp = requests.get(
-        f"{WARSAW_API_BASE}/wsstore_get",
-        params={
-            "id":     RESOURCE_TRAM_POSITIONS,
-            "type":   "1",          # 1 = trams, 2 = buses
-            "apikey": WARSAW_API_KEY,
-        },
-        timeout=15,
+    url = f"{WARSAW_API_BASE}/get_ztm_lokalizacja_pojazdow"
+    api_key = WARSAW_API_KEY.strip()
+    headers = {
+        "Authorization": api_key,
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "type": 2  # 1 for buses, 2 for trams
+    }
+
+    # Using a shorter timeout for local testing so you don't hang forever if it fails
+    resp = requests.post(
+        url,
+        json=payload,
+        headers=headers,
+        timeout=(15, 60),
     )
+
     resp.raise_for_status()
     data = resp.json()
-    return data.get("result", [])
 
+    return data if isinstance(data, list) else []
 
 # ── Publish to Pub/Sub ────────────────────────────────────────────────────────
 
@@ -80,7 +108,7 @@ def publish_positions(positions: list[dict]) -> None:
 
     # Wait for all publishes to complete
     for future in futures:
-        future.result(timeout=10)
+        future.result(timeout=20)
 
     log.info("Published %d position messages to %s", len(futures), PUBSUB_POSITIONS_TOPIC)
 

@@ -41,50 +41,86 @@ TODAY = date.today().isoformat()
 LOAD_TIMESTAMP = datetime.now(timezone.utc).isoformat()
 
 
-# ── Warsaw API helpers ────────────────────────────────────────────────────────
+# ── Warsaw API Helpers ────────────────────────────────────────────────────────
 
-async def fetch_json(session: aiohttp.ClientSession, url: str, params: dict) -> dict:
-    """Single GET call with retries (up to 3) on transient errors."""
-    params["apikey"] = WARSAW_API_KEY
+def unpack_api_row(row: list | dict) -> dict:
+    """
+    Uniwersalny helper: zamienia specyficzny format ZTM Warszawa na płaski słownik.
+    Obsługuje format listowy (odjazdy): [[{"key": ..., "value": ...}], ...]
+    Oraz format obiektowy (przystanki, linie): {"values": [{"key": ..., "value": ...}]}
+    """
+    if isinstance(row, list):
+        return {item["key"]: item["value"] for item in row if isinstance(item, dict) and "key" in item}
+
+    if isinstance(row, dict) and "values" in row and isinstance(row["values"], list):
+        return {item["key"]: item["value"] for item in row["values"] if "key" in item}
+
+    return row if isinstance(row, dict) else {}
+
+
+async def fetch_json(session: aiohttp.ClientSession, url: str, payload: dict = None) -> list | dict:
+    """Wysyła zapytanie POST z nagłówkiem Bearer i opcjonalnym payloadem JSON."""
+    headers = {
+        "Authorization": WARSAW_API_KEY.strip(),
+        "Content-Type": "application/json"
+    }
+
+    kwargs = {"headers": headers, "timeout": aiohttp.ClientTimeout(total=TIMETABLE_REQUEST_TIMEOUT_S)}
+    if payload is not None:
+        kwargs["json"] = payload
+
     for attempt in range(3):
         try:
-            async with session.get(
-                url, params=params, timeout=aiohttp.ClientTimeout(total=TIMETABLE_REQUEST_TIMEOUT_S)
-            ) as resp:
+            async with session.post(url, **kwargs) as resp:
                 resp.raise_for_status()
                 return await resp.json(content_type=None)
         except Exception as exc:
             if attempt == 2:
+                log.error("Failed API request to %s with payload %s: %s", url, payload, exc)
                 raise
             await asyncio.sleep(1.5 ** attempt)
-    return {}
+    return []
 
 
 async def get_all_stops(session: aiohttp.ClientSession) -> list[dict]:
-    """Step 1 — download all tram stops."""
-    data = await fetch_json(
-        session,
-        f"{WARSAW_API_BASE}/dbstore_get",
-        {"id": RESOURCE_STOPS},
-    )
-    return data.get("result", [])
+    """Step 1 — Download all tram stops."""
+    url = f"{WARSAW_API_BASE}/get_ztm_przystanki_komunikacji_miejskiej"
+    data = await fetch_json(session, url, payload={})
+
+    if isinstance(data, dict):
+        return data.get("result", [])
+    return data if isinstance(data, list) else []
 
 
 async def get_lines_for_stop(
     session: aiohttp.ClientSession, semaphore: asyncio.Semaphore, stop: dict
 ) -> tuple[dict, list[str]]:
-    """Step 2 — download tram lines for a single stop."""
+    """Step 2 — Download tram lines for a single stop."""
+    url = f"{WARSAW_API_BASE}/get_ztm_lista_linii_na_przystanku"
+
+    flat_stop = unpack_api_row(stop)
+    stop_id = flat_stop.get("zespol")
+    stop_nr = flat_stop.get("slupek")
+
+    payload = {
+        "busstopId": stop_id,
+        "busstopNr": stop_nr,
+    }
+
     async with semaphore:
-        data = await fetch_json(
-            session,
-            f"{WARSAW_API_BASE}/dbtimetable_get",
-            {
-                "id": RESOURCE_LINES_AT_STOP,
-                "busstopId": stop["zespol"],
-                "busstopNr": stop["slupek"],
-            },
-        )
-    lines = [row["values"][0]["value"] for row in data.get("result", [])]
+        data = await fetch_json(session, url, payload)
+
+    raw_rows = data.get("result", []) if isinstance(data, dict) else data
+    if not isinstance(raw_rows, list):
+        raw_rows = []
+
+    lines = []
+    for row in raw_rows:
+        flat_row = unpack_api_row(row)
+        line_num = flat_row.get("linia")
+        if line_num:
+            lines.append(str(line_num))
+
     return stop, lines
 
 
@@ -94,64 +130,72 @@ async def get_brigades_for_stop_line(
     stop: dict,
     line: str,
 ) -> list[dict]:
-    """Step 3 — brigade schedules for one (stop, line) pair."""
+    """Step 3 — Brigade schedules for one (stop, line) pair."""
+    url = f"{WARSAW_API_BASE}/get_ztm_odjazdy_linii_z_przystanku"
+
+    flat_stop = unpack_api_row(stop)
+    stop_id = flat_stop.get("zespol")
+    stop_nr = flat_stop.get("slupek")
+    stop_name = flat_stop.get("nazwa_zespolu", "Unknown")
+    lat_val = flat_stop.get("szer_geo", 0)
+    lon_val = flat_stop.get("dlug_geo", 0)
+
+    payload = {
+        "busstopId": stop_id,
+        "busstopNr": stop_nr,
+        "line": line,
+    }
+
     async with semaphore:
-        data = await fetch_json(
-            session,
-            f"{WARSAW_API_BASE}/dbtimetable_get",
-            {
-                "id": RESOURCE_BRIGADE_SCHEDULE,
-                "busstopId": stop["zespol"],
-                "busstopNr": stop["slupek"],
-                "line": line,
-            },
-        )
+        data = await fetch_json(session, url, payload)
+
+    raw_rows = data.get("result", []) if isinstance(data, dict) else data
+    if not isinstance(raw_rows, list):
+        raw_rows = []
 
     rows = []
-    for entry in data.get("result", []):
-        values = {v["key"]: v["value"] for v in entry.get("values", [])}
-        brigade = values.get("brygada")
-        time_str = values.get("czas")  # format: "HH:MM:SS" (may exceed 23 for night)
+    for entry in raw_rows:
+        flat_entry = unpack_api_row(entry)
+
+        brigade = flat_entry.get("brygada")
+        time_str = flat_entry.get("czas")
+
         if not brigade or not time_str:
             continue
 
-        # Convert "HH:MM:SS" (ZTM uses >24 h notation for night services)
         try:
             h, m, s = map(int, time_str.split(":"))
-            # Normalise hours > 23 to next calendar day
             extra_days = h // 24
             h = h % 24
             departure_dt = datetime.combine(
-                date.fromisoformat(TODAY), __import__("datetime").time(h, m, s)
+                date.fromisoformat(TODAY), datetime.min.time().replace(hour=h, minute=m, second=s)
             )
             if extra_days:
-                departure_dt = departure_dt.replace(
-                    day=departure_dt.day + extra_days
-                )
+                departure_dt = departure_dt + __import__("datetime").timedelta(days=extra_days)
             departure_iso = departure_dt.isoformat()
         except Exception:
             departure_iso = None
 
         rows.append({
-            "stop_id":             stop["zespol"],
-            "stop_name":           stop.get("nazwa_zespolu", ""),
-            "stop_nr":             stop["slupek"],
-            "lat":                 float(stop.get("szer_geo", 0) or 0),
-            "lon":                 float(stop.get("dlug_geo", 0) or 0),
+            "stop_id":             stop_id,
+            "stop_name":           stop_name,
+            "stop_nr":             stop_nr,
+            "lat":                 float(lat_val or 0),
+            "lon":                 float(lon_val or 0),
             "line":                line,
-            "brigade":             brigade,
+            "brigade":             str(brigade),
             "scheduled_departure": departure_iso,
             "load_date":           TODAY,
         })
     return rows
 
 
-# ── BigQuery writer ───────────────────────────────────────────────────────────
+# ── BigQuery Writer ───────────────────────────────────────────────────────────
 
 def ensure_bq_table(client: bigquery.Client) -> None:
     """Create or confirm the timetable table with correct schema."""
     dataset_ref = bigquery.DatasetReference(GCP_PROJECT_ID, BQ_DATASET)
-    table_ref = dataset_ref.table("timetable")
+    table_ref = dataset_ref.table(BQ_TABLE_TIMETABLE.split(".")[-1])
     table = bigquery.Table(table_ref, schema=TIMETABLE_SCHEMA)
     table.time_partitioning = bigquery.TimePartitioning(field="load_date")
     try:
@@ -179,11 +223,12 @@ def write_to_bigquery(rows: list[dict]) -> None:
     log.info("Wrote %d rows to %s", len(rows), BQ_TABLE_TIMETABLE)
 
 
-# ── Firestore status doc ──────────────────────────────────────────────────────
+# ── Firestore Status Doc ──────────────────────────────────────────────────────
 
 def write_load_status(row_count: int, success: bool) -> None:
     db = firestore.Client(project=GCP_PROJECT_ID)
-    db.collection("_meta").document("timetable_load_status").set({
+    collection_name = FIRESTORE_COLLECTION if FIRESTORE_COLLECTION else "_meta"
+    db.collection(collection_name).document("timetable_load_status").set({
         "load_date":       TODAY,
         "loaded_at":       LOAD_TIMESTAMP,
         "row_count":       row_count,
@@ -203,6 +248,10 @@ async def run() -> None:
         log.info("Fetching all tram stops…")
         stops = await get_all_stops(session)
         log.info("Found %d stops", len(stops))
+
+        if not stops:
+            log.error("Stops list came back completely empty. Stopping.")
+            return
 
         # 2. Lines per stop (parallel)
         log.info("Fetching lines for each stop (concurrency=%d)…", TIMETABLE_ASYNC_CONCURRENCY)
@@ -237,7 +286,10 @@ async def run() -> None:
     log.info("Total timetable rows assembled: %d", len(all_rows))
 
     # 4. Write to BigQuery
-    write_to_bigquery(all_rows)
+    if all_rows:
+        write_to_bigquery(all_rows)
+    else:
+        log.warning("No rows collected to write to BigQuery.")
 
     # 5. Signal completion
     write_load_status(row_count=len(all_rows), success=True)

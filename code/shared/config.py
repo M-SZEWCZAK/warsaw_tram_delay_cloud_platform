@@ -6,19 +6,18 @@ All services import from here so only one place needs updating.
 import os
 
 # ── Warsaw Open Data API ──────────────────────────────────────────────────────
-WARSAW_API_KEY: str = os.environ["WARSAW_API_KEY"]
-WARSAW_API_BASE: str = "https://api.um.warszawa.pl/api/action"
-
+WARSAW_API_KEY: str = os.environ.get("WARSAW_API_KEY", "")
+WARSAW_API_BASE: str = "https://dane.um.warszawa.pl/api/action"
 # Resource IDs (constants published by the city; do not change without checking
 # the catalogue at https://dane.um.warszawa.pl)
 RESOURCE_STOPS: str = "ab75c33d-3a26-4342-b36a-6e5fef0a3ac3"      # all tram stops
 RESOURCE_LINES_AT_STOP: str = "88cd555f-6f31-43ca-9de4-66c479ad5942"  # lines per stop
 RESOURCE_BRIGADE_SCHEDULE: str = "e923fa0e-d96c-43f9-ae6e-60518c9f3238"  # brigade timetable
-RESOURCE_TRAM_POSITIONS: str = "c7238cfe-8b1f-4c38-bb4a-de386db7e776"  # live positions
+RESOURCE_TRAM_POSITIONS: str = "/get_ztm_lokalizacja_pojazdow"  # live positions
 RESOURCE_WEATHER: str = "adaa4f0a-4ac1-4429-857c-4e6f46705c93"        # Warsaw weather
 
 # ── Google Cloud Platform ─────────────────────────────────────────────────────
-GCP_PROJECT_ID: str = os.environ["GCP_PROJECT_ID"]
+GCP_PROJECT_ID: str = os.environ.get("GCP_PROJECT_ID", "")
 GCP_REGION: str = os.environ.get("GCP_REGION", "europe-central2")
 
 # BigQuery

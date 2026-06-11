@@ -32,22 +32,26 @@ FETCHED_AT = datetime.now(timezone.utc).isoformat()
 
 def fetch_weather() -> dict:
     """
-    GET /api/action/imgw_get — returns current Warsaw weather observations.
+    POST /api/action/get_zom_pogoda — returns current Warsaw weather observations.
     Relevant fields: temperatura, opad, predkosc_wiatru, widzialnosc.
     """
-    resp = requests.get(
-        f"{WARSAW_API_BASE}/imgw_get",
-        params={
-            "id":     RESOURCE_WEATHER,
-            "apikey": WARSAW_API_KEY,
-        },
-        timeout=15,
+    url = f"{WARSAW_API_BASE}/get_zom_pogoda"
+    api_key = WARSAW_API_KEY.strip()
+    headers = {
+        "Authorization": api_key,
+        "Content-Type": "application/json"
+    }
+
+    resp = requests.post(
+        url,
+        headers=headers,
+        timeout=(45, 180),
     )
     resp.raise_for_status()
     data = resp.json()
-    result = data.get("result", [{}])
-    # The API returns a list; take the first (most recent) observation
-    obs = result[0] if result else {}
+
+    # Extract the nested result key safely
+    obs=data[0]
 
     def safe_float(val) -> float | None:
         try:
@@ -56,10 +60,9 @@ def fetch_weather() -> dict:
             return None
 
     return {
-        "temp_c":          safe_float(obs.get("temperatura")),
-        "precip_mm":       safe_float(obs.get("opad")),
-        "wind_ms":         safe_float(obs.get("predkosc_wiatru")),
-        "visibility_km":   safe_float(obs.get("widzialnosc")),
+        "temp_c":          safe_float(obs.get("temp_pow")),
+        "precip_mm":       safe_float(obs.get("int_opadu")),
+        "wind_ms":         safe_float(obs.get("pred_wiatru")),
         "fetched_at":      FETCHED_AT,
     }
 
