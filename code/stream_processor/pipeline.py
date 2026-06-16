@@ -38,11 +38,9 @@ import apache_beam as beam
 from apache_beam.io.gcp.bigquery import WriteToBigQuery, BigQueryDisposition
 from apache_beam.io.gcp.pubsub import ReadFromPubSub
 from apache_beam.options.pipeline_options import PipelineOptions, StandardOptions
-from apache_beam.transforms.util import BatchElements
+from apache_beam.transforms.window import SlidingWindows
 
-# Allow running from repo root
-import sys
-sys.path.insert(0, ".")
+# PYTHONPATH=/app (set in Dockerfile) makes shared.* importable on all workers.
 from shared.config import (
     GCP_PROJECT_ID,
     BQ_TABLE_POSITIONS_RAW,
@@ -224,13 +222,14 @@ def run(argv=None):
     options = PipelineOptions(argv)
     options.view_as(StandardOptions).streaming = True
 
-    positions_sub = f"projects/{GCP_PROJECT_ID}/subscriptions/{PUBSUB_POSITIONS_TOPIC}-sub"
-    weather_sub   = f"projects/{GCP_PROJECT_ID}/subscriptions/{PUBSUB_WEATHER_TOPIC}-sub"
+    weather_sub   = "projects/warsaw-tram-platform/subscriptions/tram-weather-sub"
+    positions_sub = "projects/warsaw-tram-platform/subscriptions/tram-positions-sub"
 
     with beam.Pipeline(options=options) as p:
 
         # ── Side inputs ───────────────────────────────────────────────────────
-        # Timetable: loaded once via BigQuery Storage Read API (Dataflow built-in)
+
+        # Timetable: bounded — loaded once via BigQuery, no windowing needed.
         timetable_side = (
             p
             | "ReadTimetable" >> beam.io.ReadFromBigQuery(
@@ -246,19 +245,38 @@ def run(argv=None):
         )
         timetable_view = beam.pvalue.AsList(timetable_side)
 
-        # Weather: windowed global latest (slow-changing)
+        # Weather: unbounded Pub/Sub stream — MUST be windowed before AsList.
+        # SlidingWindows gives each position element a recent weather snapshot:
+        #   - size=600s  → each window covers the last 10 minutes of weather msgs
+        #   - period=300s → a new window starts every 5 minutes
+        # Without windowing, AsList on an unbounded PCollection crashes the
+        # SDK harness immediately (the root cause of the CrashLoopBackOff).
         weather_stream = (
             p
-            | "ReadWeather"  >> ReadFromPubSub(subscription=weather_sub)
-            | "ParseWeather" >> beam.ParDo(ParseWeather())
+            | "ReadWeather"   >> ReadFromPubSub(subscription=weather_sub)
+            | "ParseWeather"  >> beam.ParDo(ParseWeather())
+            | "WindowWeather" >> beam.WindowInto(
+                SlidingWindows(
+                    size=WEATHER_WINDOW_S,           # 600 s
+                    period=WEATHER_WINDOW_S // 2,    # 300 s
+                )
+            )
         )
         weather_view = beam.pvalue.AsList(weather_stream)
 
         # ── Main stream ───────────────────────────────────────────────────────
+        # Window positions to match the weather sliding window so Beam can
+        # align the two streams for the side-input join.
         positions = (
             p
-            | "ReadPositions"  >> ReadFromPubSub(subscription=positions_sub)
-            | "ParsePositions" >> beam.ParDo(ParsePosition())
+            | "ReadPositions"   >> ReadFromPubSub(subscription=positions_sub)
+            | "ParsePositions"  >> beam.ParDo(ParsePosition())
+            | "WindowPositions" >> beam.WindowInto(
+                SlidingWindows(
+                    size=WEATHER_WINDOW_S,
+                    period=WEATHER_WINDOW_S // 2,
+                )
+            )
         )
 
         # Write raw positions to BQ immediately

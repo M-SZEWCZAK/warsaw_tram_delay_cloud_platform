@@ -1,0 +1,6 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-central2-docker.pkg.dev/warsaw-tram-platform/tram-platform/stream-processor:latest', '-f', 'stream_processor/Dockerfile', '.']
+
+images:
+  - 'europe-central2-docker.pkg.dev/warsaw-tram-platform/tram-platform/stream-processor:latest'

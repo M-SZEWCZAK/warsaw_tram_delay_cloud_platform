@@ -1,0 +1,1424 @@
+[
+  {
+    "insertId": "5kn442cko0",
+    "logName": "projects/warsaw-tram-platform/logs/cloudaudit.googleapis.com%2Factivity",
+    "protoPayload": {
+      "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+      "authenticationInfo": {
+        "oauthInfo": {
+          "oauthClientId": "32555940559.apps.googleusercontent.com"
+        },
+        "principalEmail": "michal.szewczak3.stud@pw.edu.pl",
+        "principalSubject": "user:michal.szewczak3.stud@pw.edu.pl"
+      },
+      "authorizationInfo": [
+        {
+          "granted": true,
+          "permission": "dataflow.jobs.create",
+          "permissionType": "ADMIN_WRITE",
+          "resource": "projects/warsaw-tram-platform",
+          "resourceAttributes": {}
+        }
+      ],
+      "methodName": "dataflow.jobs.create",
+      "request": {
+        "@type": "google.dataflow.v1beta3.CreateJobRequest",
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "serviceAccount": "858028405258-compute@developer.gserviceaccount.com"
+      },
+      "requestMetadata": {
+        "callerIp": "185.102.190.3",
+        "destinationAttributes": {},
+        "requestAttributes": {
+          "auth": {},
+          "time": "2026-06-12T05:55:23.507364553Z"
+        }
+      },
+      "resourceLocation": {
+        "currentLocations": [
+          "europe-central2"
+        ]
+      },
+      "resourceName": "projects/warsaw-tram-platform/locations/europe-central2/jobs/2026-06-11_22_55_23-17393752099372021452",
+      "response": {
+        "@type": "google.dataflow.v1beta3.Job"
+      },
+      "serviceName": "dataflow.googleapis.com",
+      "status": {}
+    },
+    "receiveTimestamp": "2026-06-12T05:55:24.159904174Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "NOTICE",
+    "timestamp": "2026-06-12T05:55:23.499199893Z"
+  },
+  {
+    "insertId": "10xcnl9c8zo",
+    "labels": {
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/log_type": "system",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Fjob-message",
+    "receiveTimestamp": "2026-06-12T05:55:24.744206699Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "textPayload": "Console log from launcher will be available at gs://warsaw-tram-platform-trams-raw-archive/staging/template_launches/2026-06-11_22_55_23-17393752099372021452/console_logs.",
+    "timestamp": "2026-06-12T05:55:24.041103048Z"
+  },
+  {
+    "insertId": "10xcnl9c8zp",
+    "labels": {
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/log_type": "system",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Fjob-message",
+    "receiveTimestamp": "2026-06-12T05:55:24.744206699Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "textPayload": "Starting GCE instance, launcher-2026061122552317393752099372021452, to launch the template.",
+    "timestamp": "2026-06-12T05:55:24.155645648Z"
+  },
+  {
+    "insertId": "10xcnl9c8zr",
+    "labels": {
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/log_type": "system",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Fjob-message",
+    "receiveTimestamp": "2026-06-12T05:55:33.738638227Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "textPayload": "GCE instance, launcher-2026061122552317393752099372021452, started.",
+    "timestamp": "2026-06-12T05:55:32.856150113Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:1159",
+    "jsonPayload": {
+      "message": "Starting cloudservice.service..."
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:55:59.196079Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:2223",
+    "jsonPayload": {
+      "message": "Configuring default registries...."
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:55:59.380438Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:3336",
+    "jsonPayload": {
+      "message": "WARNING: A long list of credential helpers may cause delays running 'docker build'."
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:55:59.380438Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:4473",
+    "jsonPayload": {
+      "message": "We recommend passing the registry names via the --registries flag for the specific registries you are using"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:55:59.380438Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:5547",
+    "jsonPayload": {
+      "message": "Adding config for all GCR and AR registries."
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:55:59.380438Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:6682",
+    "jsonPayload": {
+      "message": "/home/cloudservice/.docker/config.json configured to use this credential helper for GCR and AR registries"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:55:59.384698Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:7907",
+    "jsonPayload": {
+      "message": "Unable to find image 'gcr.io/dataflow-templates-base/template-launcher-logger-distroless:latest' locally"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:00.039932Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:9108",
+    "jsonPayload": {
+      "message": "latest: Pulling from dataflow-templates-base/template-launcher-logger-distroless"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.155295Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:10259",
+    "jsonPayload": {
+      "message": "6209eb235621: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.158636Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:11410",
+    "jsonPayload": {
+      "message": "8a60f9928918: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.158636Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:12561",
+    "jsonPayload": {
+      "message": "9fe853a00cd9: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.158636Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:13712",
+    "jsonPayload": {
+      "message": "23cbcf6a6609: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.158636Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:14863",
+    "jsonPayload": {
+      "message": "c7ce9b5824ba: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.158636Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:16014",
+    "jsonPayload": {
+      "message": "2fd8bad341f1: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.158636Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:17156",
+    "jsonPayload": {
+      "message": "23cbcf6a6609: Waiting"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.159337Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:18298",
+    "jsonPayload": {
+      "message": "c7ce9b5824ba: Waiting"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.159337Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:19440",
+    "jsonPayload": {
+      "message": "2fd8bad341f1: Waiting"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.159337Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:20593",
+    "jsonPayload": {
+      "message": "9fe853a00cd9: Verifying Checksum"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.461847Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:21745",
+    "jsonPayload": {
+      "message": "9fe853a00cd9: Download complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:01.461847Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:22898",
+    "jsonPayload": {
+      "message": "8a60f9928918: Verifying Checksum"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:02.217194Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:24050",
+    "jsonPayload": {
+      "message": "8a60f9928918: Download complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:02.217194Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:25203",
+    "jsonPayload": {
+      "message": "c7ce9b5824ba: Verifying Checksum"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:03.303061Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:26355",
+    "jsonPayload": {
+      "message": "c7ce9b5824ba: Download complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:03.303061Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:27508",
+    "jsonPayload": {
+      "message": "6209eb235621: Verifying Checksum"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:03.317314Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:28660",
+    "jsonPayload": {
+      "message": "6209eb235621: Download complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:03.317314Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:29813",
+    "jsonPayload": {
+      "message": "23cbcf6a6609: Verifying Checksum"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:03.897689Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:30965",
+    "jsonPayload": {
+      "message": "23cbcf6a6609: Download complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:03.897689Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:32113",
+    "jsonPayload": {
+      "message": "6209eb235621: Pull complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:04.274243Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:33261",
+    "jsonPayload": {
+      "message": "8a60f9928918: Pull complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:04.309187Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:34409",
+    "jsonPayload": {
+      "message": "9fe853a00cd9: Pull complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:04.342066Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:35557",
+    "jsonPayload": {
+      "message": "23cbcf6a6609: Pull complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:04.968258Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:36705",
+    "jsonPayload": {
+      "message": "c7ce9b5824ba: Pull complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:04.994789Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:37857",
+    "jsonPayload": {
+      "message": "2fd8bad341f1: Verifying Checksum"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:05.185181Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:39009",
+    "jsonPayload": {
+      "message": "2fd8bad341f1: Download complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:05.185181Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:40157",
+    "jsonPayload": {
+      "message": "2fd8bad341f1: Pull complete"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:05.710276Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:41357",
+    "jsonPayload": {
+      "message": "Digest: sha256:2d170379413b394797906395617930ea7d3ec3d645a98b687cdf38c6cea9ecf3"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:05.722817Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:42586",
+    "jsonPayload": {
+      "message": "Status: Downloaded newer image for gcr.io/dataflow-templates-base/template-launcher-logger-distroless:latest"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:05.728438Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:43771",
+    "jsonPayload": {
+      "message": "58405e0dea9d1ef92d9388df7834303c6cdae452ff07163c472c59245bdebb06"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:06.655681Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:44712",
+    "jsonPayload": {
+      "message": "Credentials not provided. Not logging into Docker private registry."
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:06.872700Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:45887",
+    "jsonPayload": {
+      "message": "Started cloudservice.service."
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:06.873461Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:47201",
+    "jsonPayload": {
+      "message": "Unable to find image 'europe-central2-docker.pkg.dev/warsaw-tram-platform/tram-platform/stream-processor:latest' locally"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:07.242484Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:48467",
+    "jsonPayload": {
+      "message": "latest: Pulling from warsaw-tram-platform/tram-platform/stream-processor"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:07.242484Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:49691",
+    "jsonPayload": {
+      "message": "5deb4047cbfb: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:07.242484Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:50914",
+    "jsonPayload": {
+      "message": "2e51c50554dc: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:07.242484Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:52138",
+    "jsonPayload": {
+      "message": "a234579dfb0d: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:07.242484Z"
+  },
+  {
+    "insertId": "533414952414093731:785248:0:53362",
+    "jsonPayload": {
+      "message": "0ce041001b89: Pulling fs layer"
+    },
+    "labels": {
+      "compute.googleapis.com/resource_id": "533414952414093731",
+      "compute.googleapis.com/resource_name": "launcher-2026061122552317393752099372021452",
+      "compute.googleapis.com/resource_type": "instance",
+      "dataflow.googleapis.com/job_id": "2026-06-11_22_55_23-17393752099372021452",
+      "dataflow.googleapis.com/job_name": "tram-stream-processor",
+      "dataflow.googleapis.com/region": "europe-central2"
+    },
+    "logName": "projects/warsaw-tram-platform/logs/dataflow.googleapis.com%2Flauncher",
+    "receiveTimestamp": "2026-06-12T05:56:16.967530884Z",
+    "resource": {
+      "labels": {
+        "job_id": "2026-06-11_22_55_23-17393752099372021452",
+        "job_name": "tram-stream-processor",
+        "project_id": "warsaw-tram-platform",
+        "region": "europe-central2",
+        "step_id": ""
+      },
+      "type": "dataflow_step"
+    },
+    "severity": "INFO",
+    "timestamp": "2026-06-12T05:56:07.242484Z"
+  }
+]

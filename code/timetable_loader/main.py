@@ -1,13 +1,7 @@
 """
 timetable_loader/main.py
 Cloud Run Job — triggered by Cloud Scheduler at 03:00 daily.
-
-Hierarchy:
-  1. GET all tram stops
-  2. For each stop  →  GET lines at that stop          (parallel, pool=40)
-  3. For each stop+line → GET brigade schedules         (parallel, pool=40)
-  4. Write everything to BigQuery timetable table
-  5. Write load_status document to Firestore
+Optimized for Tram-only data with anti-throttling mechanisms.
 """
 import asyncio
 import logging
@@ -17,18 +11,15 @@ from datetime import date, datetime, timezone
 import aiohttp
 from google.cloud import bigquery, firestore
 
-# Allow running from repo root: python -m timetable_loader.main
+# Allow running from repo root
 sys.path.insert(0, ".")
 from shared.config import (
     WARSAW_API_KEY,
     WARSAW_API_BASE,
-    RESOURCE_STOPS,
-    RESOURCE_LINES_AT_STOP,
-    RESOURCE_BRIGADE_SCHEDULE,
     GCP_PROJECT_ID,
     BQ_DATASET,
     BQ_TABLE_TIMETABLE,
-    TIMETABLE_ASYNC_CONCURRENCY,
+    TIMETABLE_ASYNC_CONCURRENCY,  # Used for connection pool limits
     TIMETABLE_REQUEST_TIMEOUT_S,
     FIRESTORE_COLLECTION,
 )
@@ -40,26 +31,32 @@ log = logging.getLogger(__name__)
 TODAY = date.today().isoformat()
 LOAD_TIMESTAMP = datetime.now(timezone.utc).isoformat()
 
+# ── Safe Pacing Configurations ────────────────────────────────────────────────
+BATCH_CHUNK_SIZE = 100  # Maximum concurrent tasks allowed to fire in a wave
+THROTTLE_DELAY_S = 0.08  # Pacing sleep (80ms) inside individual requests
+BATCH_BREATHER_S = 1.5  # Resting period (1.5s) between major database waves
+
 
 # ── Warsaw API Helpers ────────────────────────────────────────────────────────
 
 def unpack_api_row(row: list | dict) -> dict:
-    """
-    Uniwersalny helper: zamienia specyficzny format ZTM Warszawa na płaski słownik.
-    Obsługuje format listowy (odjazdy): [[{"key": ..., "value": ...}], ...]
-    Oraz format obiektowy (przystanki, linie): {"values": [{"key": ..., "value": ...}]}
-    """
     if isinstance(row, list):
         return {item["key"]: item["value"] for item in row if isinstance(item, dict) and "key" in item}
-
     if isinstance(row, dict) and "values" in row and isinstance(row["values"], list):
         return {item["key"]: item["value"] for item in row["values"] if "key" in item}
-
     return row if isinstance(row, dict) else {}
 
 
+def is_tram_line(line: str) -> bool:
+    """Returns True if the line string is a valid tram number (strictly 1-99, no letters)."""
+    if not line:
+        return False
+    line_clean = line.strip()
+    return line_clean.isdigit() and (1 <= int(line_clean) <= 99)
+
+
 async def fetch_json(session: aiohttp.ClientSession, url: str, payload: dict = None) -> list | dict:
-    """Wysyła zapytanie POST z nagłówkiem Bearer i opcjonalnym payloadem JSON."""
+    """Wysyła zapytanie POST z wykładniczym backoffem, tłumieniem ruchu i bezpieczną obsługą błędów."""
     headers = {
         "Authorization": WARSAW_API_KEY.strip(),
         "Content-Type": "application/json"
@@ -73,42 +70,41 @@ async def fetch_json(session: aiohttp.ClientSession, url: str, payload: dict = N
         try:
             async with session.post(url, **kwargs) as resp:
                 resp.raise_for_status()
+
+                # Active Throttling: Stop the loop from moving instantly to the next request
+                await asyncio.sleep(THROTTLE_DELAY_S)
+
                 return await resp.json(content_type=None)
-        except Exception as exc:
+        except (aiohttp.ClientError, asyncio.TimeoutError) as exc:
             if attempt == 2:
-                log.error("Failed API request to %s with payload %s: %s", url, payload, exc)
-                raise
-            await asyncio.sleep(1.5 ** attempt)
+                log.warning("Skipping payload due to API failure after 3 attempts. Payload: %s. Error: %s", payload,
+                            exc)
+                return []
+
+            backoff = 2.0 * (attempt + 1)
+            log.info("Temporary API issue. Backing off for %.1fs before retry...", backoff)
+            await asyncio.sleep(backoff)
+
     return []
 
 
 async def get_all_stops(session: aiohttp.ClientSession) -> list[dict]:
-    """Step 1 — Download all tram stops."""
     url = f"{WARSAW_API_BASE}/get_ztm_przystanki_komunikacji_miejskiej"
     data = await fetch_json(session, url, payload={})
-
     if isinstance(data, dict):
         return data.get("result", [])
     return data if isinstance(data, list) else []
 
 
-async def get_lines_for_stop(
-    session: aiohttp.ClientSession, semaphore: asyncio.Semaphore, stop: dict
-) -> tuple[dict, list[str]]:
-    """Step 2 — Download tram lines for a single stop."""
+async def get_lines_for_stop(session: aiohttp.ClientSession, stop: dict) -> tuple[dict, list[str]]:
     url = f"{WARSAW_API_BASE}/get_ztm_lista_linii_na_przystanku"
 
     flat_stop = unpack_api_row(stop)
     stop_id = flat_stop.get("zespol")
     stop_nr = flat_stop.get("slupek")
 
-    payload = {
-        "busstopId": stop_id,
-        "busstopNr": stop_nr,
-    }
-
-    async with semaphore:
-        data = await fetch_json(session, url, payload)
+    payload = {"busstopId": stop_id, "busstopNr": stop_nr}
+    data = await fetch_json(session, url, payload)
 
     raw_rows = data.get("result", []) if isinstance(data, dict) else data
     if not isinstance(raw_rows, list):
@@ -118,19 +114,15 @@ async def get_lines_for_stop(
     for row in raw_rows:
         flat_row = unpack_api_row(row)
         line_num = flat_row.get("linia")
-        if line_num:
+
+        # Filter for TRAM lines only (numbers 1-99, no alphabetical suffixes)
+        if line_num and is_tram_line(str(line_num)):
             lines.append(str(line_num))
 
     return stop, lines
 
 
-async def get_brigades_for_stop_line(
-    session: aiohttp.ClientSession,
-    semaphore: asyncio.Semaphore,
-    stop: dict,
-    line: str,
-) -> list[dict]:
-    """Step 3 — Brigade schedules for one (stop, line) pair."""
+async def get_brigades_for_stop_line(session: aiohttp.ClientSession, stop: dict, line: str) -> list[dict]:
     url = f"{WARSAW_API_BASE}/get_ztm_odjazdy_linii_z_przystanku"
 
     flat_stop = unpack_api_row(stop)
@@ -140,14 +132,8 @@ async def get_brigades_for_stop_line(
     lat_val = flat_stop.get("szer_geo", 0)
     lon_val = flat_stop.get("dlug_geo", 0)
 
-    payload = {
-        "busstopId": stop_id,
-        "busstopNr": stop_nr,
-        "line": line,
-    }
-
-    async with semaphore:
-        data = await fetch_json(session, url, payload)
+    payload = {"busstopId": stop_id, "busstopNr": stop_nr, "line": line}
+    data = await fetch_json(session, url, payload)
 
     raw_rows = data.get("result", []) if isinstance(data, dict) else data
     if not isinstance(raw_rows, list):
@@ -156,7 +142,6 @@ async def get_brigades_for_stop_line(
     rows = []
     for entry in raw_rows:
         flat_entry = unpack_api_row(entry)
-
         brigade = flat_entry.get("brygada")
         time_str = flat_entry.get("czas")
 
@@ -177,23 +162,22 @@ async def get_brigades_for_stop_line(
             departure_iso = None
 
         rows.append({
-            "stop_id":             stop_id,
-            "stop_name":           stop_name,
-            "stop_nr":             stop_nr,
-            "lat":                 float(lat_val or 0),
-            "lon":                 float(lon_val or 0),
-            "line":                line,
-            "brigade":             str(brigade),
+            "stop_id": stop_id,
+            "stop_name": stop_name,
+            "stop_nr": stop_nr,
+            "lat": float(lat_val or 0),
+            "lon": float(lon_val or 0),
+            "line": line,
+            "brigade": str(brigade),
             "scheduled_departure": departure_iso,
-            "load_date":           TODAY,
+            "load_date": TODAY,
         })
     return rows
 
 
-# ── BigQuery Writer ───────────────────────────────────────────────────────────
+# ── BigQuery & Firestore Writers ──────────────────────────────────────────────
 
 def ensure_bq_table(client: bigquery.Client) -> None:
-    """Create or confirm the timetable table with correct schema."""
     dataset_ref = bigquery.DatasetReference(GCP_PROJECT_ID, BQ_DATASET)
     table_ref = dataset_ref.table(BQ_TABLE_TIMETABLE.split(".")[-1])
     table = bigquery.Table(table_ref, schema=TIMETABLE_SCHEMA)
@@ -211,7 +195,7 @@ def write_to_bigquery(rows: list[dict]) -> None:
     BATCH = 1000
     errors = []
     for i in range(0, len(rows), BATCH):
-        chunk = rows[i : i + BATCH]
+        chunk = rows[i: i + BATCH]
         errs = client.insert_rows_json(BQ_TABLE_TIMETABLE, chunk)
         if errs:
             errors.extend(errs)
@@ -219,91 +203,78 @@ def write_to_bigquery(rows: list[dict]) -> None:
     if errors:
         log.error("BQ insert errors (sample): %s", errors[:5])
         raise RuntimeError(f"{len(errors)} BQ insert errors")
-
     log.info("Wrote %d rows to %s", len(rows), BQ_TABLE_TIMETABLE)
 
 
-# ── Firestore Status Doc ──────────────────────────────────────────────────────
+# ── Orchestrator Main Loop ──────────────────────────────────────────────────
 
-def write_load_status(row_count: int, success: bool) -> None:
-    db = firestore.Client(project=GCP_PROJECT_ID)
-    collection_name = FIRESTORE_COLLECTION if FIRESTORE_COLLECTION else "_meta"
-    db.collection(collection_name).document("timetable_load_status").set({
-        "load_date":       TODAY,
-        "loaded_at":       LOAD_TIMESTAMP,
-        "row_count":       row_count,
-        "success":         success,
-    })
-    log.info("Firestore load_status written (success=%s, rows=%d)", success, row_count)
+async def main():
+    log.info("Starting Warsaw Tram Timetable scraper job...")
 
-
-# ── Orchestrator ──────────────────────────────────────────────────────────────
-
-async def run() -> None:
-    semaphore = asyncio.Semaphore(TIMETABLE_ASYNC_CONCURRENCY)
+    # Configure connection limits explicitly using your shared config parameters
     connector = aiohttp.TCPConnector(limit=TIMETABLE_ASYNC_CONCURRENCY)
 
     async with aiohttp.ClientSession(connector=connector) as session:
-        # 1. Stops
-        log.info("Fetching all tram stops…")
-        stops = await get_all_stops(session)
-        log.info("Found %d stops", len(stops))
-
-        if not stops:
-            log.error("Stops list came back completely empty. Stopping.")
+        # Step 1: Fetch all public transit stops
+        log.info("Fetching master list of transit stops...")
+        all_stops = await get_all_stops(session)
+        if not all_stops:
+            log.error("Zero stops found. Exiting.")
             return
 
-        # 2. Lines per stop (parallel)
-        log.info("Fetching lines for each stop (concurrency=%d)…", TIMETABLE_ASYNC_CONCURRENCY)
-        stop_lines_tasks = [
-            get_lines_for_stop(session, semaphore, stop) for stop in stops
-        ]
-        stop_lines_results = await asyncio.gather(*stop_lines_tasks, return_exceptions=True)
+        log.info("Found %d total stops. Scanning for active tram lines...", len(all_stops))
 
-        # 3. Brigades per (stop, line) (parallel)
-        brigade_tasks = []
-        for result in stop_lines_results:
-            if isinstance(result, Exception):
-                log.warning("stop/lines fetch error: %s", result)
-                continue
-            stop, lines = result
+        # Step 2: Extract which lines run on which stops (chunked to stay under limits)
+        stops_with_trams = []
+        for i in range(0, len(all_stops), BATCH_CHUNK_SIZE):
+            chunk = all_stops[i: i + BATCH_CHUNK_SIZE]
+
+            # Fire an intentional wave of concurrent connections up to BATCH_CHUNK_SIZE
+            tasks = [get_lines_for_stop(session, stop) for stop in chunk]
+            results = await asyncio.gather(*tasks)
+
+            # Keep only elements where a tram line is actively running
+            for stop_data, lines in results:
+                if lines:
+                    stops_with_trams.append((stop_data, lines))
+
+            # Prevent API abuse between waves
+            await asyncio.sleep(BATCH_BREATHER_S)
+
+        log.info("Identified %d stops with active tram schedules.", len(stops_with_trams))
+
+        # Step 3: Fetch departure timetable info for each validated tram line
+        all_timetable_rows = []
+
+        # Unroll stops and lines into individual queryable units
+        unrolled_queries = []
+        for stop, lines in stops_with_trams:
             for line in lines:
-                brigade_tasks.append(
-                    get_brigades_for_stop_line(session, semaphore, stop, line)
-                )
+                unrolled_queries.append((stop, line))
 
-        log.info("Fetching brigade schedules for %d (stop, line) pairs…", len(brigade_tasks))
-        brigade_results = await asyncio.gather(*brigade_tasks, return_exceptions=True)
+        log.info("Processing %d distinct stop-line combinations...", len(unrolled_queries))
 
-    # Flatten
-    all_rows: list[dict] = []
-    for res in brigade_results:
-        if isinstance(res, Exception):
-            log.warning("Brigade fetch error: %s", res)
+        for i in range(0, len(unrolled_queries), BATCH_CHUNK_SIZE):
+            chunk = unrolled_queries[i: i + BATCH_CHUNK_SIZE]
+
+            tasks = [get_brigades_for_stop_line(session, stop, line) for stop, line in chunk]
+            results = await asyncio.gather(*tasks)
+
+            for rows in results:
+                if rows:
+                    all_timetable_rows.extend(rows)
+
+            await asyncio.sleep(BATCH_BREATHER_S)
+
+        # Step 4: Write off-loaded data to BigQuery
+        if all_timetable_rows:
+            log.info("Persisting %d data points into BigQuery...", len(all_timetable_rows))
+            write_to_bigquery(all_timetable_rows)
         else:
-            all_rows.extend(res)
+            log.warning("Pipeline completed but found no active timetable rows to write.")
 
-    log.info("Total timetable rows assembled: %d", len(all_rows))
-
-    # 4. Write to BigQuery
-    if all_rows:
-        write_to_bigquery(all_rows)
-    else:
-        log.warning("No rows collected to write to BigQuery.")
-
-    # 5. Signal completion
-    write_load_status(row_count=len(all_rows), success=True)
-    log.info("Timetable load complete.")
-
-
-def main() -> None:
-    try:
-        asyncio.run(run())
-    except Exception:
-        log.exception("Timetable loader failed")
-        write_load_status(row_count=0, success=False)
-        sys.exit(1)
+    log.info("Cloud Run Job executed successfully.")
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -1,0 +1,16 @@
+{
+  "name": "Tram Stream Processor",
+  "description": "Streaming pipeline: consumes tram positions and weather from Pub/Sub, enriches with timetable, writes to BigQuery and Firestore.",
+  "parameters": [
+    {
+      "name": "project",
+      "label": "GCP Project ID",
+      "helpText": "GCP project ID"
+    },
+    {
+      "name": "region",
+      "label": "GCP Region",
+      "helpText": "GCP region e.g. europe-central2"
+    }
+  ]
+}

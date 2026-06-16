@@ -1,0 +1,14 @@
+# docker-compose.yml
+# Used only for building and pushing the frontend image.
+# Not used for running in production (that's Cloud Run).
+#
+# Usage:
+#   docker compose build
+#   docker compose push
+
+services:
+  tram-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: europe-central2-docker.pkg.dev/warsaw-tram-platform/tram-platform/tram-frontend:${TAG:-latest}

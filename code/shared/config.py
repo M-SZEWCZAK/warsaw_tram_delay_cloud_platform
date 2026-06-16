@@ -17,7 +17,7 @@ RESOURCE_TRAM_POSITIONS: str = "/get_ztm_lokalizacja_pojazdow"  # live positions
 RESOURCE_WEATHER: str = "adaa4f0a-4ac1-4429-857c-4e6f46705c93"        # Warsaw weather
 
 # ── Google Cloud Platform ─────────────────────────────────────────────────────
-GCP_PROJECT_ID: str = os.environ.get("GCP_PROJECT_ID", "")
+GCP_PROJECT_ID: str = os.environ.get("GCP_PROJECT_ID", "warsaw-tram-platform")
 GCP_REGION: str = os.environ.get("GCP_REGION", "europe-central2")
 
 # BigQuery

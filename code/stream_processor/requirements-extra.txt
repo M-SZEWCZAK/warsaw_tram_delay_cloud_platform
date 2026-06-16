@@ -1,0 +1,7 @@
+# These are NOT in the apache/beam_python3.12_sdk base image
+google-cloud-firestore==2.16.0
+google-cloud-bigquery==3.22.0
+
+google-cloud-bigquery==3.22.0
+google-cloud-firestore==2.16.0
+google-cloud-pubsub==2.21.4
