@@ -7,7 +7,6 @@ COPY shared/ /app/shared/
 COPY stream_processor/ /app/stream_processor/
 
 RUN pip install --no-cache-dir -r /app/stream_processor/requirements.txt
-
 ENV PYTHONPATH=/app
 ENV FLEX_TEMPLATE_PYTHON_PY_FILE="/app/stream_processor/pipeline.py"
 
